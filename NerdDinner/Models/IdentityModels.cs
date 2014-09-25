@@ -13,5 +13,7 @@ namespace NerdDinner.Models
             : base("DefaultConnection")
         {
         }
+
+        public System.Data.Entity.DbSet<NerdDinner.Models.Dinner> Dinners { get; set; }
     }
 }

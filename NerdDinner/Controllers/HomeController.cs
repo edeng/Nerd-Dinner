@@ -3,28 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NerdDinner.Models;
 
 namespace NerdDinner.Controllers
 {
     public class HomeController : Controller
     {
+        NerdDinners nerdDinners = new NerdDinners();
+
+        //
+        // GET: /
         public ActionResult Index()
         {
+            var dinners = from d in nerdDinners.Dinners
+                          where d.EventDate > DateTime.Now
+                          select d;
+            return View(dinners.ToList());
+        }
+
+        //
+        // GET: /Home/Create
+        public ActionResult Create()
+        {
             return View();
         }
 
-        public ActionResult About()
+        //
+        // GET: /Home/Create
+        [HttpPost]
+        public ActionResult Create(Dinner dinner)
         {
-            ViewBag.Message = "Your application description page.";
+            if (ModelState.IsValid)
+            {
+                nerdDinners.Dinners.Add(dinner);
+                nerdDinners.SaveChanges();
 
-            return View();
-        }
+                return RedirectToAction("Index");
+            }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return View(dinner);
         }
     }
 }

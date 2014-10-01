@@ -14,7 +14,7 @@ namespace NerdDinner
     {
         protected void Application_Start()
         {
-            Database.SetInitializer(new NerdDinnersInitializer());
+            //Database.SetInitializer(new NerdDinnersInitializer());
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

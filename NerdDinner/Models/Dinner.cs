@@ -26,6 +26,11 @@ namespace NerdDinner.Models
         public string HostedBy { get; set; }
         public string Country { get; set; }
 
+        public string Description { get; set; }
+        public string ContactPhone { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
+
         public virtual ICollection<RSVP> RSVPs { get; set; }
     }
 }

@@ -49,6 +49,11 @@ namespace NerdDinner.Models
             db.Dinners.Remove(dinner);
         }
 
+        public void ModifyState(Dinner dinner)
+        {
+            db.Entry(dinner).State = EntityState.Modified; 
+        }
+
         // 
         // Persistence
 

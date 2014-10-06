@@ -10,15 +10,14 @@ namespace NerdDinner.Controllers
     public class HomeController : Controller
     {
         NerdDinners nerdDinners = new NerdDinners();
+        DinnerRepository dinnerRepository = new DinnerRepository();
+
 
         //
         // GET: /
         public ActionResult Index()
         {
-            var dinners = from d in nerdDinners.Dinners
-                          where d.EventDate > DateTime.Now
-                          select d;
-            return View(dinners.ToList());
+            return View(dinnerRepository.FindUpcomingDinners());
         }
 
         //
@@ -35,8 +34,9 @@ namespace NerdDinner.Controllers
         {
             if (ModelState.IsValid)
             {
-                nerdDinners.Dinners.Add(dinner);
-                nerdDinners.SaveChanges();
+                UpdateModel(dinner);
+                dinnerRepository.Add(dinner);
+                dinnerRepository.Save();
 
                 return RedirectToAction("Index");
             }

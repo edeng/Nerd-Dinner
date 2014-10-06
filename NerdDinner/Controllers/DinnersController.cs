@@ -22,7 +22,7 @@ namespace NerdDinner.Controllers
         {
             const int pageSize = 10;
 
-            var dinners = dinnerRepository.FindUpcomingDinners().ToList();
+            var dinners = dinnerRepository.FindUpcomingDinners().AsQueryable();
             var paginatedDinners = new PaginatedList<Dinner>(dinners, page ?? 0, pageSize);
 
            // var paginatedDinners = dinners.Skip((page ?? 0) * pageSize).Take(pageSize).ToList();
@@ -47,12 +47,16 @@ namespace NerdDinner.Controllers
 
         // 
         // GET: /Dinners/Edit/2
+
         [Authorize]
         public ActionResult Edit(int id)
         {
             Dinner dinner = dinnerRepository.GetDinner(id);
 
             ViewData["Countries"] = new SelectList(PhoneValidator.Countries, dinner.Country);
+
+            if (!dinner.IsHostedBy(User.Identity.Name))
+                return View("InvalidOwner"); 
 
             return View(dinner); 
         }
@@ -65,9 +69,19 @@ namespace NerdDinner.Controllers
         {
             if (ModelState.IsValid)
             {
-                dinnerRepository.ModifyState(modifiedDinner);
-                dinnerRepository.Save();
-                return RedirectToAction("Details", new { id = modifiedDinner.DinnerID });
+                if (!modifiedDinner.IsHostedBy(User.Identity.Name))
+                    return View("InvalidOwner");
+
+                try
+                {
+                    dinnerRepository.ModifyState(modifiedDinner);
+                    dinnerRepository.Save();
+                    return RedirectToAction("Details", new { id = modifiedDinner.DinnerID });
+                }
+                catch
+                {
+                    //ModelState.AddModelErrors(dinnerToEdit.GetRuleViolations());
+                }
             }
 
             return View(modifiedDinner);
@@ -76,6 +90,7 @@ namespace NerdDinner.Controllers
         // 
         // GET: /Dinners/Create
 
+        [Authorize]
         public ActionResult Create()
         {
 
@@ -92,17 +107,30 @@ namespace NerdDinner.Controllers
         // 
         // POST: /Dinners/Create
 
-        [AcceptVerbs(HttpVerbs.Post)]
+        [AcceptVerbs(HttpVerbs.Post), Authorize]
         public ActionResult Create(Dinner dinner)
         {
             if (ModelState.IsValid)
             {
-                UpdateModel(dinner); 
+                try
+                {
+                    dinner.HostedBy = User.Identity.Name;
+                    RSVP rsvp = new RSVP();
+                    rsvp.AttendeeEmail = User.Identity.Name;
+                    dinner.RSVPs.Add(rsvp);
 
-                dinnerRepository.Add(dinner); 
-                dinnerRepository.Save();
+                    UpdateModel(dinner);
 
-                return RedirectToAction("Details", new {id = dinner.DinnerID});
+                    dinnerRepository.Add(dinner);
+                    dinnerRepository.Save();
+
+                    return RedirectToAction("Details", new {id = dinner.DinnerID});
+                }
+                catch
+                {
+                    //ModelState.AddModelErrors(dinner.GetRuleViolations());   
+                }
+
             }
 
             ViewData["Countries"] = new SelectList(PhoneValidator.Countries, dinner.Country);

@@ -165,7 +165,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\PaginatedList.cs" />
+    <Compile Include="Models\PaginatedList.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Dinner.cs" />
     <Compile Include="Models\DinnerFormViewModel.cs" />
@@ -233,9 +233,11 @@
     <Content Include="Views\Dinners\Deleted.cshtml" />
     <Content Include="Views\Dinners\NotFound.cshtml" />
     <Content Include="Views\Dinners\DinnerForm.cshtml" />
+    <Content Include="Views\Dinners\InvalidOwner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

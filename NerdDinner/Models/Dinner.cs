@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Web;
 
@@ -9,6 +10,11 @@ namespace NerdDinner.Models
 {
     public class Dinner
     {
+        public Dinner()
+        {
+            this.RSVPs = new List<RSVP>();
+        }
+
         public int DinnerID { get; set; }
 
         [Required(ErrorMessage = "Please enter a Dinner Title")]
@@ -23,9 +29,9 @@ namespace NerdDinner.Models
         [StringLength(30, ErrorMessage = "Address is too long")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "Please enter your email address")]
-        [RegularExpression(".+\\@.+\\..+", ErrorMessage = "Please enter a valid email address")]
-        [DisplayName("Hosted By")]
+        //[Required(ErrorMessage = "Please enter your email address")]
+        //[RegularExpression(".+\\@.+\\..+", ErrorMessage = "Please enter a valid email address")]
+        //[DisplayName("Hosted By")]
         public string HostedBy { get; set; }
         public string Country { get; set; }
 

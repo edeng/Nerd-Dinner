@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
@@ -116,6 +117,7 @@ namespace NerdDinner.Controllers
                 {
                     dinner.HostedBy = User.Identity.Name;
                     RSVP rsvp = new RSVP();
+                    rsvp.Dinner = dinner; 
                     rsvp.AttendeeEmail = User.Identity.Name;
                     dinner.RSVPs.Add(rsvp);
 
@@ -126,8 +128,9 @@ namespace NerdDinner.Controllers
 
                     return RedirectToAction("Details", new {id = dinner.DinnerID});
                 }
-                catch
+                catch(Exception e)
                 {
+                    Debug.WriteLine(e.Message);
                     //ModelState.AddModelErrors(dinner.GetRuleViolations());   
                 }
 
@@ -138,9 +141,13 @@ namespace NerdDinner.Controllers
             return View(dinner); 
         }
 
+        [Authorize]
         public ActionResult Delete(int id)
         {
             Dinner dinner = dinnerRepository.GetDinner(id);
+
+            if (!dinner.IsHostedBy(User.Identity.Name))
+                return View("InvalidOwner"); 
 
             if (dinner == null)
                 return View("NotFound");
@@ -152,10 +159,13 @@ namespace NerdDinner.Controllers
         //
         // HTTP POST: /Dinners/Delete/1
 
-        [AcceptVerbs(HttpVerbs.Post)]
+        [AcceptVerbs(HttpVerbs.Post), Authorize]
         public ActionResult Delete(int id, string confirmButton)
         {
             Dinner dinner = dinnerRepository.GetDinner(id);
+
+            if (!dinner.IsHostedBy(User.Identity.Name))
+                return View("InvalidOwner"); 
 
             if (dinner == null)
                 return View("NotFound");

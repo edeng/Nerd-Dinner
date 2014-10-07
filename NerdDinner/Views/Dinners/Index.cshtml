@@ -10,14 +10,26 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
+
+
 <ul>
-@foreach (var item in Model)
-{
-    <li>
-        @Html.ActionLink(item.Title, "Details", new { id = item.DinnerID })
-        on
-        @Html.DisplayFor(modelItem => item.EventDate)
-    </li>
-}
+    @foreach (var item in Model)
+    {
+        <li>
+            @Html.ActionLink(item.Title, "Details", new { id = item.DinnerID })
+            on
+            @Html.DisplayFor(modelItem => item.EventDate)
+        </li>
+    }
 
 </ul>
+
+@if (Model.HasPreviousPage)
+{
+    Html.RouteLink("<<<", "UpcomingDinners", new { page = (Model.PageIndex + 1) });
+}
+
+@if (Model.HasNextPage)
+{
+    Html.RouteLink(">>>", "UpcomingDinners", new {page = (Model.PageIndex + 1)});
+}

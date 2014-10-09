@@ -1,0 +1,17 @@
+﻿<div id="rsvpmsg">
+    @if (Request.IsAuthenticated)
+    {
+        if (Model.IsUserRegistered(Context.User.Identity.Name))
+        {
+            <p>You are registered for this event!</p>
+        }
+        else
+        {
+            <a href="#" id="action">RSVP for this event</a>
+        }
+    }
+    else
+    {
+        <span><a href="../../Account/Login">Logon</a> to RSVP for this Event</span>
+    }
+</div>

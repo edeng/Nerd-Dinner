@@ -1,13 +1,13 @@
-﻿@model NerdDinner.Models.Dinner
+﻿@using System.Collections.Specialized
+@using Microsoft.Ajax.Utilities
+@model NerdDinner.Models.Dinner
 
 @{
     ViewBag.Title = "Dinner: " + Model.Title;
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>@Html.DisplayFor(model => model.Title)</h4>
+    <h2>@Html.DisplayFor(model => model.Title)</h2>
     <hr />
     
     <p>
@@ -24,100 +24,42 @@
     <p>
         <strong>Decription:</strong>
         @Html.DisplayFor(model => model.Description)
-    </p>
+    </p> 
     
     <p>
         <strong>Organizer:</strong>
         @Html.DisplayFor(model => model.HostedBy)
-       (@Html.DisplayFor(model => model.ContactPhone))
+        (@Html.DisplayFor(model => model.ContactPhone))
     </p>
-
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EventDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EventDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.HostedBy)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HostedBy)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ContactPhone)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ContactPhone)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Latitude)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Latitude)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Longitude)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Longitude)
-        </dd>
-
-    </dl>
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index") 
-    @if (Model.IsHostedBy(Context.User.Identity.Name))
-    {
-        <span>
-            |
-            @Html.ActionLink("Edit", "Edit", new { id = Model.DinnerID })
-            |
-            @Html.ActionLink("Delete Dinner", "Delete", new { id = Model.DinnerID })
-        </span>
-    }
 
-</p>
+@{
+    Html.RenderPartial("RSVPStatus"); 
+    Html.RenderPartial("EditAndDeleteLinks");
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function() {
+            var rsvpUrl = "@Url.Action("Register", "RSVP", new { id = Model.DinnerID })";
+
+            $('#action').click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: rsvpUrl,
+                    type: 'POST',
+                    success: function(html) {
+                        $('#rsvpmsg').html(html);
+                        AnimateRSVPMessage();
+                    },
+                });
+            });
+        });
+
+        function AnimateRSVPMessage() {
+            $("#rsvpmsg").animate({ fontSize: "1.5em" }, 400);
+        }
+    </script>
+    
+
+}

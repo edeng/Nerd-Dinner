@@ -9,3 +9,66 @@
 
 
 @{ Html.RenderPartial("DinnerForm"); }
+
+
+@section scripts
+{
+    <script src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2" type="text/javascript"></script>
+    <script src="/Scripts/Map.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#Address").blur(function (evt) {
+                $("#Latitude").val("");
+                $("#Longitude").val("");
+
+                var address = jQuery.trim($("#Address").val());
+                if (address.length < 1)
+                    return;
+
+                FindAddressOnMap(address);
+            });
+        });
+
+    </script>
+
+    <script type="text/javascript">
+
+            $(document).ready(function() {
+                var latitude = parseFloat("@Html.Encode(Model.Latitude)");
+                var longitude = parseFloat("@Html.Encode(Model.Longitude)");
+
+                if ((latitude == 0) || (longitude == 0))
+                    LoadMap(null,null,null);
+                else
+                    LoadMap(latitude, longitude, mapLoaded);
+            });
+
+            function mapLoaded() {
+                var title = "@Html.Encode(Model.Title)";
+                var address = "@Html.Encode(Model.Title)";
+
+            LoadPin(center, title, address);
+            map.SetZoomLevel(14);
+        }
+
+    </script>    
+    
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#Address").blur(function (evt) {
+                $("#Latitude").val("");
+                $("#Longitude").val("");
+
+                var address = jQuery.trim($("#Address").val());
+                if (address.length < 1)
+                    return;
+
+                FindAddressOnMap(address);
+            });
+        });
+
+    </script>
+}

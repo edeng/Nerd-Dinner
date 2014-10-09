@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdDinner", "NerdDinner\NerdDinner.csproj", "{C4F7ACC6-EDDC-4925-B92E-25BD9F9649A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{7FF4001C-D9A7-4A93-8009-E346342800ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdDinner.Tests", "NerdDinner.Tests\NerdDinner.Tests.csproj", "{682AEF19-CD90-4DA6-9B72-BA094F4E1490}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +19,15 @@ Global
 		{C4F7ACC6-EDDC-4925-B92E-25BD9F9649A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4F7ACC6-EDDC-4925-B92E-25BD9F9649A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4F7ACC6-EDDC-4925-B92E-25BD9F9649A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{682AEF19-CD90-4DA6-9B72-BA094F4E1490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{682AEF19-CD90-4DA6-9B72-BA094F4E1490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{682AEF19-CD90-4DA6-9B72-BA094F4E1490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{682AEF19-CD90-4DA6-9B72-BA094F4E1490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{682AEF19-CD90-4DA6-9B72-BA094F4E1490} = {7FF4001C-D9A7-4A93-8009-E346342800ED}
 	EndGlobalSection
 EndGlobal

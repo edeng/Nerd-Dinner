@@ -3,11 +3,13 @@
 <script src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.2" type="text/javascript"></script>
 <script src="/Scripts/Map.js" type="text/javascript"></script>
 
+
+
 <script type="text/javascript">
 
     $(document).ready(function() {
-        var latitude = Model.Latitude;
-        var longitude = Model.Longitude;
+        var latitude = parseFloat("@Html.Encode(Model.Latitude)");
+        var longitude = parseFloat("@Html.Encode(Model.Longitude)");
 
         if ((latitude == 0) || (longitude == 0))
             LoadMap();

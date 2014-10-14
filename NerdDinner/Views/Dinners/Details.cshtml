@@ -38,6 +38,10 @@
     Html.RenderPartial("EditAndDeleteLinks");
 }
 
+<div id="theMap" style="position:relative">
+    @{ Html.RenderPartial("Map"); }    
+</div>
+
 @section Scripts {
     <script type="text/javascript">
         $(function() {

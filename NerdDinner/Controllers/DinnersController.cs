@@ -68,13 +68,17 @@ namespace NerdDinner.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditVerify(Dinner modifiedDinner)
         {
+            
+
             if (ModelState.IsValid)
             {
+
                 if (!modifiedDinner.IsHostedBy(User.Identity.Name))
                     return View("InvalidOwner");
 
                 try
                 {
+                    ViewData["Countries"] = new SelectList(PhoneValidator.Countries, modifiedDinner.Country);
                     dinnerRepository.ModifyState(modifiedDinner);
                     dinnerRepository.Save();
                     return RedirectToAction("Details", new { id = modifiedDinner.DinnerID });

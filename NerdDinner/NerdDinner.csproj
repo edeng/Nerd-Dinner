@@ -40,6 +40,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -168,6 +171,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\EfExtensions.cs" />
+    <Compile Include="Models\IDinnerRepository.cs" />
     <Compile Include="Models\PaginatedList.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Dinner.cs" />
@@ -178,6 +182,7 @@
     <Compile Include="Models\NerdDinnersInitializer.cs" />
     <Compile Include="Models\PhoneValidator.cs" />
     <Compile Include="Models\RSVP.cs" />
+    <Compile Include="Models\RuleViolation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

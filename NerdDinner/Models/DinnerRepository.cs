@@ -10,7 +10,7 @@ using NerdDinner.Models;
 
 namespace NerdDinner.Models
 {
-    public class DinnerRepository
+    public class DinnerRepository : IDinnerRepository 
     {
         public NerdDinners db = new NerdDinners();
 
@@ -35,33 +35,34 @@ namespace NerdDinner.Models
             return db.Dinners.SingleOrDefault(d => d.DinnerID == id); 
         }
 
-        public IQueryable<Dinner> FindByLocation(float latitude, float longitude)
+        public IQueryable<Dinner> FindByLocation(decimal latitude, decimal longitude)
         {
 
-            var dinners = from dinner in FindUpcomingDinners()
-                          //join i in db.NearestDinners(latitude, longitude)
-                          //on dinner.DinnerID equals i.DinnerID
-                          select dinner;
+            //var dinners = from dinner in FindUpcomingDinners()
+            //              join i in NearestDinners(latitude, longitude)
+            //              on dinner.DinnerID equals i.DinnerID
+            //              select dinner;
 
-            // TODO: select from the database
-            //       create calculation method 
+            var dinners = FindUpcomingDinners().ToList();
+            var nearestDinners = NearestDinners(latitude, longitude);
+            var nearestDinnerIds = nearestDinners.Select(d => d.DinnerID).ToList();
+            return dinners.Where(d => nearestDinnerIds.Contains(d.DinnerID)).AsQueryable();
 
-            return dinners;
         }
 
-        public IQueryable<Dinner> NearestDinners()
+        public IQueryable<Dinner> NearestDinners(decimal lat1, decimal long1)
         {
-            decimal lat1 = 0;
-            decimal long1 = 0;
+            //var dinners = from dinner in FindUpcomingDinners()
+            //    where DistanceBetween(lat1, long1, dinner.Latitude, dinner.Longitude) < 100
+            //    select dinner;
 
-            var dinners = from dinner in FindUpcomingDinners()
-                where DistanceBetween(lat1, long1, dinner.Latitude, dinner.Longitude) < 100
-                select dinner;
+            var dinners = FindUpcomingDinners().ToList();
+            dinners.Where(d => DistanceBetween(lat1, long1, d.Latitude, d.Longitude) < 100).ToList();
 
-            return dinners; 
+            return dinners.AsQueryable(); 
         }
 
-        private decimal DistanceBetween(decimal lat1, decimal long1, decimal lat2, decimal long2)
+        public decimal DistanceBetween(decimal lat1, decimal long1, decimal lat2, decimal long2)
         {
             decimal dLat1InRad = lat1 * (decimal)(Math.PI/180.0);
             decimal dLong1InRad = long1 * (decimal)(Math.PI / 180.0);

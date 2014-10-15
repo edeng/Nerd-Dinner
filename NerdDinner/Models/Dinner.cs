@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Linq;
 using System.Linq;
 using System.Web;
 
@@ -52,6 +53,26 @@ namespace NerdDinner.Models
         public bool IsUserRegistered(string userName)
         {
             return RSVPs.Any(r => r.AttendeeEmail.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public bool IsValid
+        {
+            get { return (GetRuleViolations() != null); }
+        }
+
+        public RuleViolation GetRuleViolations()
+        {
+            if (String.IsNullOrEmpty(EventDate.ToString()))
+                return new RuleViolation("Field value text is required", "SomeField");
+            else
+                return null;
+
+        }
+
+        public void OnValidate(ChangeAction action)
+        {
+            if (!IsValid)
+                throw new ApplicationException("Rule violations prevent saving");
         }
     }
 }

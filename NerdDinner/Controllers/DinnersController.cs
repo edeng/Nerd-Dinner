@@ -7,15 +7,23 @@ using System.Web.Routing;
 using System.Web.UI;
 using NerdDinner.Models;
 
+
 namespace NerdDinner.Controllers
 {
     public class DinnersController : Controller
     {
-        NerdDinners nerdDinners = new NerdDinners();
+        private IDinnerRepository dinnerRepository = new DinnerRepository();
 
+        public DinnersController()
+            : this(new DinnerRepository())
+        {
+            
+        }
 
-        private DinnerRepository dinnerRepository = new DinnerRepository();
-
+        public DinnersController(IDinnerRepository repository)
+        {
+            dinnerRepository = repository; 
+        }
 
         // GET: /Dinners/
         //      /Dinners?page=2
@@ -40,7 +48,7 @@ namespace NerdDinner.Controllers
 
             if (dinner == null)
             {
-                return HttpNotFound();
+                return View("NotFound");
             }
 
             return View(dinner);
@@ -66,7 +74,7 @@ namespace NerdDinner.Controllers
         // POST: /Dinners/Edit/5
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditVerify(Dinner modifiedDinner)
+        public ActionResult Edit(Dinner modifiedDinner)
         {
             
 
@@ -83,9 +91,9 @@ namespace NerdDinner.Controllers
                     dinnerRepository.Save();
                     return RedirectToAction("Details", new { id = modifiedDinner.DinnerID });
                 }
-                catch
+                catch (Exception e)
                 {
-                    //ModelState.AddModelErrors(dinnerToEdit.GetRuleViolations());
+                    ///ModelState.AddModelError(modifiedDinner.GetRuleViolations());
                 }
             }
 
